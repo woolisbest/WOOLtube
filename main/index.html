@@ -4,23 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wool-Tube</title>
-  <link rel="stylesheet" href="https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/main/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/woolisbest/WOOLtube@main/main/style.css">
 </head>
 <body>
     <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
-    
     <div class="container">
         <h1>
             <div class="logo">🐑</div>
             Wool-Tube
         </h1>
-        
         <div class="search-box">
             <div class="input-group">
                 <input type="text" id="apiKey" placeholder="Google API Key（オプション）">
             </div>
             <div class="input-group">
-                <input type="text" id="searchQuery" placeholder="検索キーワードまたはYouTube URLを入力" onkeypress="if(event.key==='Enter') searchVideos()">
+                <input
+                    type="text"
+                    id="searchQuery"
+                    placeholder="検索キーワードまたはYouTube URLを入力"
+                    onkeypress="if(event.key==='Enter') searchVideos()"
+                >
                 <button onclick="searchVideos()">🔍 検索</button>
             </div>
             <div class="api-note">
@@ -29,11 +32,16 @@
                 🌐 GitHub Pages対応: CORSプロキシ経由で通信します
             </div>
         </div>
-
         <div class="player-section" id="playerSection" style="display: none;">
             <div id="currentVideo"></div>
+
             <div id="playerContainer">
-                <iframe id="player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                <iframe
+                    id="player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                ></iframe>
             </div>
             <div class="controls">
                 <button onclick="setPlayMode('stream')" id="btnStream">🎬 ストリーム再生</button>
@@ -47,15 +55,27 @@
             </div>
             <div class="quality-controls" id="qualityControls" style="display: none;"></div>
             <div class="stream-url" id="streamUrl"></div>
-            <div style="margin-top: 10px; padding: 10px; background: #1a1a1a; border-radius: 5px; color: #00ff00; font-family: monospace; font-size: 11px; max-height: 200px; overflow-y: auto; display: none;" id="debugLog"></div>
+            <div
+                id="debugLog"
+                style="
+                    margin-top: 10px;
+                    padding: 10px;
+                    background: #1a1a1a;
+                    border-radius: 5px;
+                    color: #00ff00;
+                    font-family: monospace;
+                    font-size: 11px;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    display: none;
+                "
+            ></div>
         </div>
-
         <div id="loading" class="loading" style="display: none;">読み込み中...</div>
         <div id="error" class="error" style="display: none;"></div>
         <div id="info" class="info" style="display: none;"></div>
-        
         <div class="results" id="results"></div>
     </div>
-<script src="https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/main/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/woolisbest/WOOLtube@main/main/script.js" defer></script>
 </body>
 </html>
