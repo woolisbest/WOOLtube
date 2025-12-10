@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wool-Tube</title>
+  <link rel="stylesheet" href="https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/main/style.css">
+</head>
+<body>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    
+    <div class="container">
+        <h1>
+            <div class="logo">🐑</div>
+            Wool-Tube
+        </h1>
+        
+        <div class="search-box">
+            <div class="input-group">
+                <input type="text" id="apiKey" placeholder="Google API Key（オプション）">
+            </div>
+            <div class="input-group">
+                <input type="text" id="searchQuery" placeholder="検索キーワードまたはYouTube URLを入力" onkeypress="if(event.key==='Enter') searchVideos()">
+                <button onclick="searchVideos()">🔍 検索</button>
+            </div>
+            <div class="api-note">
+                ※Google API Keyを入力すると、YouTube Data API v3で検索します（より正確な検索結果）<br>
+                APIキーなしでも、代替APIで検索可能です<br>
+                🌐 GitHub Pages対応: CORSプロキシ経由で通信します
+            </div>
+        </div>
+
+        <div class="player-section" id="playerSection" style="display: none;">
+            <div id="currentVideo"></div>
+            <div id="playerContainer">
+                <iframe id="player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="controls">
+                <button onclick="setPlayMode('stream')" id="btnStream">🎬 ストリーム再生</button>
+                <button onclick="setPlayMode('embed')">📺 埋め込み再生</button>
+                <button onclick="setPlayMode('nocookie')">🍪 No Cookie</button>
+                <button onclick="setPlayMode('education')">📚 Education</button>
+            </div>
+            <div class="controls">
+                <button onclick="downloadVideo('video')" id="btnDownloadVideo">📥 動画DL</button>
+                <button onclick="downloadVideo('audio')" id="btnDownloadAudio">🎵 音声DL</button>
+            </div>
+            <div class="quality-controls" id="qualityControls" style="display: none;"></div>
+            <div class="stream-url" id="streamUrl"></div>
+            <div style="margin-top: 10px; padding: 10px; background: #1a1a1a; border-radius: 5px; color: #00ff00; font-family: monospace; font-size: 11px; max-height: 200px; overflow-y: auto; display: none;" id="debugLog"></div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">読み込み中...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="info" class="info" style="display: none;"></div>
+        
+        <div class="results" id="results"></div>
+    </div>
+    <script>
+    </script>
+</body>
+</html>
