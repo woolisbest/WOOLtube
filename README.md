@@ -6,4 +6,12 @@
 2. 「New」 → 「static site」 を選択
 3. RemixしたWOOLtubeのリポジトリの公開URLを入力
 4. 一番下の完了ボタン的なとこを押す
-5. 数分待つと完了です☑️
+5. 数分待つと完了です
+### html.cafe
+[html.cafe](https://html.cafe)
+にアクセス
+
+[コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/html-cafe.html.txt)
+を張り付ける
+
+終わり
