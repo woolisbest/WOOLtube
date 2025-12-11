@@ -5,6 +5,6 @@ function doGet() {
   const html = response.getContentText();
 
   return HtmlService.createHtmlOutput(html)
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL) // 必要ならiframe許可
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)
     .setSandboxMode(HtmlService.SandboxMode.IFRAME);
 }
