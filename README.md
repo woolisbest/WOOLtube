@@ -11,7 +11,7 @@
 1. [html.cafe](https://html.cafe)にアクセス
 2. [コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/fetch-code.html)を張り付ける
 3. [コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/main/index.html)を張り付ける
-   
+4. [コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/index.html)を張り付ける
 5. 完了✅
 ### Google App Script
 1. [GAS](https://script.google.com)にアクセス
