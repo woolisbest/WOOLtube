@@ -1,9 +1,1545 @@
-<!DOCTYPE html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <script>
-      window.addEventListener('DOMContentLoaded', async function() {const url = 'https://cdn.jsdelivr.net/gh/woolisbest/WOOLtube@main/main/index.html';try {const response = await fetch(url);if (response.ok) {const htmlContent = await response.text();document.open();  document.write(htmlContent);  document.close();  }} catch (error) {}});
-    </script>
-  </head>
-</html>
+<pre>
+  &lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Wool-Tube&lt;/title&gt;
+    &lt;style&gt;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: &#039;Segoe UI&#039;, Tahoma, Geneva, Verdana, sans-serif;
+            background: #000066;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 45px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .search-box {
+            background: linear-gradient(135deg, #4a0e34 0%, #2d1b3d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            transition: background 0.3s;
+        }
+
+        body.light-mode .search-box {
+            background: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type=&quot;text&quot;] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, background 0.3s;
+            background: #000000;
+            color: white;
+        }
+
+        body.light-mode input[type=&quot;text&quot;] {
+            background: white;
+            color: #333;
+            border: 2px solid #e0e0e0;
+        }
+
+        input[type=&quot;text&quot;]::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        body.light-mode input[type=&quot;text&quot;]::placeholder {
+            color: rgba(0,0,0,0.5);
+        }
+
+        input[type=&quot;text&quot;]:focus {
+            outline: none;
+            border-color: #7b1fa2;
+            background: #1a1a1a;
+        }
+
+        body.light-mode input[type=&quot;text&quot;]:focus {
+            background: #f9f9f9;
+            border-color: #7b1fa2;
+        }
+
+        button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #7b1fa2 0%, #4a148c 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(123,31,162,0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .player-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        #player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        #playerContainer {
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .controls button {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .quality-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .quality-controls button {
+            min-width: 120px;
+            padding: 12px 20px;
+            font-size: 14px;
+        }
+
+        .quality-controls button.active {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            box-shadow: 0 3px 10px rgba(76,175,80,0.4);
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+
+        .video-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-channel {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        .error {
+            background: #ff5252;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        #currentVideo {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stream-url {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            font-size: 12px;
+            word-break: break-all;
+        }
+
+        .api-note {
+            font-size: 12px;
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+            transition: color 0.3s;
+        }
+
+        body.light-mode .api-note {
+            color: #666;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            background: rgba(255,255,255,0.3);
+        }
+
+        body.light-mode .theme-toggle {
+            background: rgba(0,0,0,0.1);
+        }
+
+        body.light-mode .theme-toggle:hover {
+            background: rgba(0,0,0,0.2);
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;button class=&quot;theme-toggle&quot; onclick=&quot;toggleTheme()&quot; id=&quot;themeToggle&quot;&gt;🌙&lt;/button&gt;
+    
+    &lt;div class=&quot;container&quot;&gt;
+        &lt;h1&gt;
+            &lt;div class=&quot;logo&quot;&gt;🐑&lt;/div&gt;
+            Wool-Tube
+        &lt;/h1&gt;
+        
+        &lt;div class=&quot;search-box&quot;&gt;
+            &lt;div class=&quot;input-group&quot;&gt;
+                &lt;input type=&quot;text&quot; id=&quot;apiKey&quot; placeholder=&quot;Google API Key（オプション）&quot;&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;input-group&quot;&gt;
+                &lt;input type=&quot;text&quot; id=&quot;searchQuery&quot; placeholder=&quot;検索キーワードまたはYouTube URLを入力&quot; onkeypress=&quot;if(event.key===&#039;Enter&#039;) searchVideos()&quot;&gt;
+                &lt;button onclick=&quot;searchVideos()&quot;&gt;🔍 検索&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;api-note&quot;&gt;
+                ※Google API Keyを入力すると、YouTube Data API v3で検索します（より正確な検索結果）&lt;br&gt;
+                APIキーなしでも、代替APIで検索可能です&lt;br&gt;
+                🌐 GitHub Pages対応: CORSプロキシ経由で通信します
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;player-section&quot; id=&quot;playerSection&quot; style=&quot;display: none;&quot;&gt;
+            &lt;div id=&quot;currentVideo&quot;&gt;&lt;/div&gt;
+            &lt;div id=&quot;playerContainer&quot;&gt;
+                &lt;iframe id=&quot;player&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;controls&quot;&gt;
+                &lt;button onclick=&quot;setPlayMode(&#039;stream&#039;)&quot; id=&quot;btnStream&quot;&gt;🎬 ストリーム再生&lt;/button&gt;
+                &lt;button onclick=&quot;setPlayMode(&#039;embed&#039;)&quot;&gt;📺 埋め込み再生&lt;/button&gt;
+                &lt;button onclick=&quot;setPlayMode(&#039;nocookie&#039;)&quot;&gt;🍪 No Cookie&lt;/button&gt;
+                &lt;button onclick=&quot;setPlayMode(&#039;education&#039;)&quot;&gt;📚 Education&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;controls&quot;&gt;
+                &lt;button onclick=&quot;downloadVideo(&#039;video&#039;)&quot; id=&quot;btnDownloadVideo&quot;&gt;📥 動画DL&lt;/button&gt;
+                &lt;button onclick=&quot;downloadVideo(&#039;audio&#039;)&quot; id=&quot;btnDownloadAudio&quot;&gt;🎵 音声DL&lt;/button&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;quality-controls&quot; id=&quot;qualityControls&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;
+            &lt;div class=&quot;stream-url&quot; id=&quot;streamUrl&quot;&gt;&lt;/div&gt;
+            &lt;div style=&quot;margin-top: 10px; padding: 10px; background: #1a1a1a; border-radius: 5px; color: #00ff00; font-family: monospace; font-size: 11px; max-height: 200px; overflow-y: auto; display: none;&quot; id=&quot;debugLog&quot;&gt;&lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div id=&quot;loading&quot; class=&quot;loading&quot; style=&quot;display: none;&quot;&gt;読み込み中...&lt;/div&gt;
+        &lt;div id=&quot;error&quot; class=&quot;error&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;
+        &lt;div id=&quot;info&quot; class=&quot;info&quot; style=&quot;display: none;&quot;&gt;&lt;/div&gt;
+        
+        &lt;div class=&quot;results&quot; id=&quot;results&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script&gt;
+        let currentVideoId = null;
+        let availableStreams = [];
+        let currentPlayMode = &#039;embed&#039;;
+        let debugMessages = [];
+        let currentQuality = null;
+        
+        function addDebug(msg) {
+            debugMessages.push(`[${new Date().toLocaleTimeString()}] ${msg}`);
+            const debugLog = document.getElementById(&#039;debugLog&#039;);
+            if (debugLog) {
+                debugLog.style.display = &#039;block&#039;;
+                debugLog.innerHTML = debugMessages.slice(-15).join(&#039;&lt;br&gt;&#039;);
+            }
+            console.log(msg);
+        }
+        
+        // CORSプロキシ設定
+        const CORS_PROXIES = [
+            &#039;https://api.allorigins.win/raw?url=&#039;,
+            &#039;https://corsproxy.io/?&#039;,
+            &#039;https://api.codetabs.com/v1/proxy?quest=&#039;
+        ];
+        let currentProxyIndex = 0;
+
+        function getProxiedUrl(url) {
+            const proxy = CORS_PROXIES[currentProxyIndex];
+            return `${proxy}${encodeURIComponent(url)}`;
+        }
+
+        function rotateProxy() {
+            currentProxyIndex = (currentProxyIndex + 1) % CORS_PROXIES.length;
+            addDebug(`🔄 プロキシ切り替え: ${CORS_PROXIES[currentProxyIndex]}`);
+        }
+
+        const streamAPIs = [
+            {
+                name: &#039;Invidious&#039;,
+                servers: [
+                    &#039;https://nyc1.iv.ggtyler.dev&#039;,
+                    &#039;https://invid-api.poketube.fun&#039;,
+                    &#039;https://cal1.iv.ggtyler.dev&#039;,
+                    &#039;https://invidious.nikkosphere.com&#039;,
+                    &#039;https://lekker.gay&#039;,
+                    &#039;https://invidious.f5.si&#039;,
+                    &#039;https://invidious.lunivers.trade&#039;,
+                    &#039;https://pol1.iv.ggtyler.dev&#039;,
+                    &#039;https://eu-proxy.poketube.fun&#039;,
+                    &#039;https://iv.melmac.space&#039;,
+                    &#039;https://invidious.reallyaweso.me&#039;,
+                    &#039;https://invidious.dhusch.de&#039;,
+                    &#039;https://usa-proxy2.poketube.fun&#039;,
+                    &#039;https://id.420129.xyz&#039;,
+                    &#039;https://invidious.darkness.service&#039;,
+                    &#039;https://iv.datura.network&#039;,
+                    &#039;https://invidious.jing.rocks&#039;,
+                    &#039;https://invidious.private.coffee&#039;,
+                    &#039;https://youtube.mosesmang.com&#039;,
+                    &#039;https://iv.duti.dev&#039;,
+                    &#039;https://invidious.projectsegfau.lt&#039;,
+                    &#039;https://invidious.perennialte.ch&#039;,
+                    &#039;https://invidious.einfachzocken.eu&#039;,
+                    &#039;https://invidious.adminforge.de&#039;,
+                    &#039;https://inv.nadeko.net&#039;,
+                    &#039;https://invidious.esmailelbob.xyz&#039;,
+                    &#039;https://invidious.0011.lt&#039;,
+                    &#039;https://invidious.ducks.party&#039;,
+                    &#039;https://invidious.fdn.fr&#039;,
+                    &#039;https://invidious.privacydev.net&#039;,
+                    &#039;https://iv.nboeck.de&#039;,
+                    &#039;https://invidious.protokolla.fi&#039;,
+                    &#039;https://invidious.slipfox.xyz&#039;,
+                    &#039;https://inv.bp.projectsegfau.lt&#039;,
+                    &#039;https://yt.artemislena.eu&#039;,
+                    &#039;https://invidious.flokinet.to&#039;,
+                    &#039;https://invidious.kavin.rocks&#039;,
+                    &#039;https://vid.puffyan.us&#039;,
+                    &#039;https://inv.riverside.rocks&#039;,
+                    &#039;https://invidious.tiekoetter.com&#039;,
+                    &#039;https://inv.vern.cc&#039;,
+                    &#039;https://invidious.nerdvpn.de&#039;,
+                    &#039;https://inv.us.projectsegfau.lt&#039;,
+                    &#039;https://invidious.lunar.icu&#039;,
+                    &#039;https://inv.in.projectsegfau.lt&#039;,
+                    &#039;https://yt.drgnz.club&#039;,
+                    &#039;https://inv.tux.pizza&#039;,
+                    &#039;https://iv.ggtyler.dev&#039;,
+                    &#039;https://inv.citw.lgbt&#039;,
+                    &#039;https://inv.odyssey346.dev&#039;,
+                    &#039;https://yewtu.be&#039;,
+                    &#039;https://invidious.snopyta.org&#039;,
+                    &#039;https://vid.mint.lgbt&#039;,
+                    &#039;https://invidious.sethforprivacy.com&#039;,
+                    &#039;https://invidious.namazso.eu&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/v1/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    const streams = [];
+                    
+                    if (data.formatStreams &amp;&amp; data.formatStreams.length &gt; 0) {
+                        data.formatStreams.forEach(s =&gt; {
+                            if (s.url) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || s.quality || &#039;unknown&#039;, 
+                                    type: &#039;Invidious&#039;,
+                                    hasAudio: true
+                                });
+                            }
+                        });
+                    }
+                    
+                    if (data.adaptiveFormats &amp;&amp; data.adaptiveFormats.length &gt; 0) {
+                        data.adaptiveFormats.forEach(s =&gt; {
+                            if (s.url &amp;&amp; s.type &amp;&amp; s.type.includes(&#039;video&#039;)) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || &#039;auto&#039;, 
+                                    type: &#039;Invidious&#039;,
+                                    hasAudio: false
+                                });
+                            }
+                        });
+                    }
+                    
+                    return streams;
+                }
+            },
+            {
+                name: &#039;Piped&#039;,
+                servers: [
+                    &#039;https://pipedapi.kavin.rocks&#039;,
+                    &#039;https://api-piped.mha.fi&#039;,
+                    &#039;https://pipedapi.tokhmi.xyz&#039;,
+                    &#039;https://pipedapi.adminforge.de&#039;,
+                    &#039;https://api.piped.projectsegfau.lt&#039;,
+                    &#039;https://pipedapi.pfcd.me&#039;,
+                    &#039;https://api.piped.privacydev.net&#039;,
+                    &#039;https://pipedapi.in.projectsegfau.lt&#039;,
+                    &#039;https://pipedapi.osphost.fi&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/streams/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.videoStreams) return [];
+                    return data.videoStreams.map(s =&gt; ({
+                        url: s.url,
+                        quality: s.quality,
+                        type: &#039;Piped&#039;,
+                        hasAudio: true
+                    }));
+                }
+            },
+            {
+                name: &#039;Poké&#039;,
+                servers: [
+                    &#039;https://poke.tchncs.de&#039;,
+                    &#039;https://poke.ggtyler.dev&#039;,
+                    &#039;https://poke.privacydev.net&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/v1/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    const streams = [];
+                    if (data.formatStreams) {
+                        data.formatStreams.forEach(s =&gt; {
+                            if (s.url) streams.push({ 
+                                url: s.url, 
+                                quality: s.qualityLabel || s.quality, 
+                                type: &#039;Poké&#039;,
+                                hasAudio: true
+                            });
+                        });
+                    }
+                    return streams;
+                }
+            },
+            {
+                name: &#039;Tubo&#039;,
+                servers: [
+                    &#039;https://tubo.migalmoreno.com&#039;,
+                    &#039;https://tubo.reallyaweso.me&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/streams/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.videoStreams) return [];
+                    return data.videoStreams.map(s =&gt; ({
+                        url: s.url,
+                        quality: s.quality,
+                        type: &#039;Tubo&#039;,
+                        hasAudio: true
+                    }));
+                }
+            },
+            {
+                name: &#039;ViewTube&#039;,
+                servers: [&#039;https://api.viewtube.io&#039;],
+                getUrl: (server, videoId) =&gt; `${server}/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.adaptiveFormats) return [];
+                    return data.adaptiveFormats
+                        .filter(f =&gt; f.mimeType &amp;&amp; f.mimeType.includes(&#039;video&#039;) &amp;&amp; f.url)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.qualityLabel || &#039;auto&#039;,
+                            type: &#039;ViewTube&#039;,
+                            hasAudio: false
+                        }));
+                }
+            },
+            {
+                name: &#039;FreeTube&#039;,
+                servers: [
+                    &#039;https://api.freetube.app&#039;,
+                    &#039;https://freetube-api.vercel.app&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/v1/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    const streams = [];
+                    
+                    if (data.formatStreams &amp;&amp; data.formatStreams.length &gt; 0) {
+                        data.formatStreams.forEach(s =&gt; {
+                            if (s.url) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || s.quality, 
+                                    type: &#039;FreeTube&#039;,
+                                    hasAudio: true
+                                });
+                            }
+                        });
+                    }
+                    
+                    if (data.adaptiveFormats &amp;&amp; data.adaptiveFormats.length &gt; 0) {
+                        data.adaptiveFormats.forEach(s =&gt; {
+                            if (s.url &amp;&amp; s.type &amp;&amp; s.type.includes(&#039;video&#039;)) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || &#039;auto&#039;, 
+                                    type: &#039;FreeTube&#039;,
+                                    hasAudio: false
+                                });
+                            }
+                        });
+                    }
+                    
+                    return streams;
+                }
+            },
+            {
+                name: &#039;CloudTube&#039;,
+                servers: [
+                    &#039;https://tube.cadence.moe&#039;,
+                    &#039;https://cloudtube.rknight.me&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/v1/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    const streams = [];
+                    if (data.formatStreams) {
+                        data.formatStreams.forEach(s =&gt; {
+                            if (s.url) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || s.quality, 
+                                    type: &#039;CloudTube&#039;,
+                                    hasAudio: true
+                                });
+                            }
+                        });
+                    }
+                    if (data.adaptiveFormats) {
+                        data.adaptiveFormats.forEach(s =&gt; {
+                            if (s.url &amp;&amp; s.type &amp;&amp; s.type.includes(&#039;video&#039;)) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || &#039;auto&#039;, 
+                                    type: &#039;CloudTube&#039;,
+                                    hasAudio: false
+                                });
+                            }
+                        });
+                    }
+                    return streams;
+                }
+            },
+            {
+                name: &#039;LightTube&#039;,
+                servers: [
+                    &#039;https://tube.kuylar.dev&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/player?v=${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.formats) return [];
+                    return data.formats
+                        .filter(f =&gt; f.url)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.quality || f.qualityLabel || &#039;auto&#039;,
+                            type: &#039;LightTube&#039;,
+                            hasAudio: true
+                        }));
+                }
+            },
+            {
+                name: &#039;Clipious&#039;,
+                servers: [
+                    &#039;https://api.clipious.app&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/videos/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    const streams = [];
+                    if (data.formatStreams) {
+                        data.formatStreams.forEach(s =&gt; {
+                            if (s.url) {
+                                streams.push({ 
+                                    url: s.url, 
+                                    quality: s.qualityLabel || s.quality, 
+                                    type: &#039;Clipious&#039;,
+                                    hasAudio: true
+                                });
+                            }
+                        });
+                    }
+                    return streams;
+                }
+            },
+            {
+                name: &#039;YTMous&#039;,
+                servers: [
+                    &#039;https://ytmous.vercel.app&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/video/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.formats) return [];
+                    return data.formats
+                        .filter(f =&gt; f.mimeType &amp;&amp; f.mimeType.includes(&#039;video&#039;) &amp;&amp; f.url)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.qualityLabel || f.quality || &#039;auto&#039;,
+                            type: &#039;YTMous&#039;,
+                            hasAudio: true
+                        }));
+                }
+            },
+            {
+                name: &#039;YT-DLP&#039;,
+                servers: [
+                    &#039;https://yt-dl-test.vercel.app&#039;,
+                    &#039;https://youtube-dl-api.vercel.app&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/info?url=https://www.youtube.com/watch?v=${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.formats) return [];
+                    return data.formats
+                        .filter(f =&gt; f.url &amp;&amp; f.vcodec &amp;&amp; f.vcodec !== &#039;none&#039;)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.height ? `${f.height}p` : (f.format_note || &#039;auto&#039;),
+                            type: &#039;YT-DLP&#039;,
+                            hasAudio: f.acodec &amp;&amp; f.acodec !== &#039;none&#039;,
+                            format_id: f.format_id,
+                            ext: f.ext
+                        }));
+                }
+            },
+            {
+                name: &#039;GoogleVideo&#039;,
+                servers: [&#039;https://corsproxy.io/?&#039;],
+                getUrl: (server, videoId) =&gt; `${server}https://www.youtube.com/get_video_info?video_id=${videoId}`,
+                parseResponse: (data) =&gt; {
+                    try {
+                        const params = new URLSearchParams(data);
+                        const playerResponse = JSON.parse(params.get(&#039;player_response&#039;) || &#039;{}&#039;);
+                        
+                        if (!playerResponse.streamingData) return [];
+                        
+                        const streams = [];
+                        const streamingData = playerResponse.streamingData;
+                        
+                        if (streamingData.formats) {
+                            streamingData.formats.forEach(f =&gt; {
+                                if (f.url) {
+                                    streams.push({
+                                        url: f.url,
+                                        quality: f.qualityLabel || f.quality || &#039;auto&#039;,
+                                        type: &#039;GoogleVideo&#039;,
+                                        hasAudio: true,
+                                        itag: f.itag
+                                    });
+                                }
+                            });
+                        }
+                        
+                        if (streamingData.adaptiveFormats) {
+                            streamingData.adaptiveFormats.forEach(f =&gt; {
+                                if (f.url &amp;&amp; f.mimeType &amp;&amp; f.mimeType.includes(&#039;video&#039;)) {
+                                    streams.push({
+                                        url: f.url,
+                                        quality: f.qualityLabel || &#039;auto&#039;,
+                                        type: &#039;GoogleVideo&#039;,
+                                        hasAudio: false,
+                                        itag: f.itag
+                                    });
+                                }
+                            });
+                        }
+                        
+                        return streams;
+                    } catch (err) {
+                        console.error(&#039;GoogleVideo parse error:&#039;, err);
+                        return [];
+                    }
+                }
+            },
+            {
+                name: &#039;Cobalt&#039;,
+                servers: [
+                    &#039;https://api.cobalt.tools&#039;,
+                    &#039;https://co.wuk.sh&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/api/json`,
+                parseResponse: (data) =&gt; {
+                    if (!data.url) return [];
+                    return [{
+                        url: data.url,
+                        quality: data.quality || &#039;max&#039;,
+                        type: &#039;Cobalt&#039;,
+                        hasAudio: true
+                    }];
+                },
+                customFetch: async (server, videoId) =&gt; {
+                    const url = server;
+                    const proxiedUrl = getProxiedUrl(url);
+                    
+                    const response = await fetch(proxiedUrl, {
+                        method: &#039;POST&#039;,
+                        headers: {
+                            &#039;Content-Type&#039;: &#039;application/json&#039;,
+                            &#039;Accept&#039;: &#039;application/json&#039;
+                        },
+                        body: JSON.stringify({
+                            url: `https://www.youtube.com/watch?v=${videoId}`,
+                            vQuality: &#039;max&#039;
+                        }),
+                        signal: AbortSignal.timeout(8000)
+                    });
+                    return response;
+                }
+            },
+            {
+                name: &#039;Y2Mate&#039;,
+                servers: [
+                    &#039;https://www.y2mate.com/mates/analyzeV2/ajax&#039;
+                ],
+                getUrl: (server, videoId) =&gt; server,
+                parseResponse: (data) =&gt; {
+                    if (!data.links || !data.links.mp4) return [];
+                  const streams = [];
+                    Object.entries(data.links.mp4).forEach(([quality, info]) =&gt; {
+                        if (info.url) {
+                            streams.push({
+                                url: info.url,
+                                quality: quality,
+                                type: &#039;Y2Mate&#039;,
+                                hasAudio: true
+                            });
+                        }
+                    });
+                    return streams;
+                },
+                customFetch: async (server, videoId) =&gt; {
+                    const formData = new FormData();
+                    formData.append(&#039;k_query&#039;, `https://www.youtube.com/watch?v=${videoId}`);
+                    formData.append(&#039;k_page&#039;, &#039;home&#039;);
+                    formData.append(&#039;hl&#039;, &#039;en&#039;);
+                    formData.append(&#039;q_auto&#039;, &#039;0&#039;);
+                    
+                    const proxiedUrl = getProxiedUrl(server);
+                    
+                    const response = await fetch(proxiedUrl, {
+                        method: &#039;POST&#039;,
+                        body: formData,
+                        signal: AbortSignal.timeout(8000)
+                    });
+                    return response;
+                }
+            },
+            {
+                name: &#039;SaveFrom&#039;,
+                servers: [
+                    &#039;https://savefrom.net/download&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}?url=https://www.youtube.com/watch?v=${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.url || !Array.isArray(data.url)) return [];
+                    return data.url
+                        .filter(u =&gt; u.url &amp;&amp; u.type === &#039;video&#039;)
+                        .map(u =&gt; ({
+                            url: u.url,
+                            quality: u.quality || u.name || &#039;auto&#039;,
+                            type: &#039;SaveFrom&#039;,
+                            hasAudio: true
+                        }));
+                }
+            },
+            {
+                name: &#039;SSYoutube&#039;,
+                servers: [
+                    &#039;https://ssyoutube.com/api/convert&#039;
+                ],
+                getUrl: (server, videoId) =&gt; server,
+                parseResponse: (data) =&gt; {
+                    if (!data.formats) return [];
+                    return data.formats
+                        .filter(f =&gt; f.url)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.qualityLabel || f.quality || &#039;auto&#039;,
+                            type: &#039;SSYoutube&#039;,
+                            hasAudio: true
+                        }));
+                },
+                customFetch: async (server, videoId) =&gt; {
+                    const proxiedUrl = getProxiedUrl(server);
+                    
+                    const response = await fetch(proxiedUrl, {
+                        method: &#039;POST&#039;,
+                        headers: { &#039;Content-Type&#039;: &#039;application/json&#039; },
+                        body: JSON.stringify({
+                            url: `https://www.youtube.com/watch?v=${videoId}`
+                        }),
+                        signal: AbortSignal.timeout(8000)
+                    });
+                    return response;
+                }
+            },
+            {
+                name: &#039;KeepVid&#039;,
+                servers: [
+                    &#039;https://keepvid.pro/api/video&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}?url=https://www.youtube.com/watch?v=${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.formats) return [];
+                    return data.formats
+                        .filter(f =&gt; f.url &amp;&amp; f.type === &#039;video&#039;)
+                        .map(f =&gt; ({
+                            url: f.url,
+                            quality: f.quality || &#039;auto&#039;,
+                            type: &#039;KeepVid&#039;,
+                            hasAudio: true
+                        }));
+                }
+            },
+            {
+                name: &#039;YouTubeToMP3&#039;,
+                servers: [
+                    &#039;https://youtubetomp3music.com/api/convert&#039;
+                ],
+                getUrl: (server, videoId) =&gt; server,
+                parseResponse: (data) =&gt; {
+                    if (!data.url) return [];
+                    return [{
+                        url: data.url,
+                        quality: data.quality || &#039;default&#039;,
+                        type: &#039;YouTubeToMP3&#039;,
+                        hasAudio: true
+                    }];
+                },
+                customFetch: async (server, videoId) =&gt; {
+                    const proxiedUrl = getProxiedUrl(server);
+                    
+                    const response = await fetch(proxiedUrl, {
+                        method: &#039;POST&#039;,
+                        headers: { &#039;Content-Type&#039;: &#039;application/json&#039; },
+                        body: JSON.stringify({
+                            url: `https://www.youtube.com/watch?v=${videoId}`,
+                            format: &#039;mp4&#039;
+                        }),
+                        signal: AbortSignal.timeout(8000)
+                    });
+                    return response;
+                }
+            },
+            {
+                name: &#039;YTBGoat&#039;,
+                servers: [
+                    &#039;https://ytbgoat.com/api/video&#039;
+                ],
+                getUrl: (server, videoId) =&gt; `${server}/${videoId}`,
+                parseResponse: (data) =&gt; {
+                    if (!data.streams) return [];
+                    return data.streams
+                        .filter(s =&gt; s.url)
+                        .map(s =&gt; ({
+                            url: s.url,
+                            quality: s.quality || s.resolution || &#039;auto&#039;,
+                            type: &#039;YTBGoat&#039;,
+                            hasAudio: s.hasAudio !== false
+                        }));
+                }
+            },
+            {
+                name: &#039;loader.to&#039;,
+                servers: [
+                    &#039;https://loader.to/ajax/download.php&#039;
+                ],
+                getUrl: (server, videoId) =&gt; server,
+                parseResponse: (data) =&gt; {
+                    if (!data.url) return [];
+                    return [{
+                        url: data.url,
+                        quality: &#039;default&#039;,
+                        type: &#039;loader.to&#039;,
+                        hasAudio: true
+                    }];
+                },
+                customFetch: async (server, videoId) =&gt; {
+                    const formData = new FormData();
+                    formData.append(&#039;url&#039;, `https://www.youtube.com/watch?v=${videoId}`);
+                    
+                    const proxiedUrl = getProxiedUrl(server);
+                    
+                    const response = await fetch(proxiedUrl, {
+                        method: &#039;POST&#039;,
+                        body: formData,
+                        signal: AbortSignal.timeout(8000)
+                    });
+                    return response;
+                }
+            }
+        ];
+        
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById(&#039;themeToggle&#039;);
+            
+            body.classList.toggle(&#039;light-mode&#039;);
+            
+            if (body.classList.contains(&#039;light-mode&#039;)) {
+                themeToggle.textContent = &#039;☀️&#039;;
+            } else {
+                themeToggle.textContent = &#039;🌙&#039;;
+            }
+        }
+
+        async function searchVideos() {
+            const query = document.getElementById(&#039;searchQuery&#039;).value.trim();
+            const apiKey = document.getElementById(&#039;apiKey&#039;).value.trim();
+            const loading = document.getElementById(&#039;loading&#039;);
+            const error = document.getElementById(&#039;error&#039;);
+            const info = document.getElementById(&#039;info&#039;);
+            const results = document.getElementById(&#039;results&#039;);
+
+            error.style.display = &#039;none&#039;;
+            info.style.display = &#039;none&#039;;
+            results.innerHTML = &#039;&#039;;
+
+            if (!query) {
+                showError(&#039;検索キーワードまたはURLを入力してください&#039;);
+                return;
+            }
+
+            const videoIdMatch = query.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&amp;\s]+)/);
+            if (videoIdMatch) {
+                playVideo(videoIdMatch[1], &#039;YouTube動画&#039;);
+                return;
+            }
+
+            loading.style.display = &#039;block&#039;;
+            showInfo(&#039;検索中...&#039;);
+
+            if (apiKey) {
+                try {
+                    const response = await fetch(
+                        `https://www.googleapis.com/youtube/v3/search?part=snippet&amp;maxResults=12&amp;q=${encodeURIComponent(query)}&amp;type=video&amp;key=${apiKey}`,
+                        { signal: AbortSignal.timeout(10000) }
+                    );
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.items &amp;&amp; data.items.length &gt; 0) {
+                            displayGoogleResults(data.items);
+                            loading.style.display = &#039;none&#039;;
+                            showInfo(&#039;Google YouTube Data API で検索しました&#039;);
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.log(&#039;Google API error:&#039;, err);
+                }
+            }
+
+            showError(&#039;検索に失敗しました。YouTube URLを直接入力するか、Google API Keyを入力してみてください。&#039;);
+            loading.style.display = &#039;none&#039;;
+        }
+
+        function displayGoogleResults(items) {
+            const results = document.getElementById(&#039;results&#039;);
+            
+            items.forEach(item =&gt; {
+                const videoId = item.id.videoId;
+                const card = document.createElement(&#039;div&#039;);
+                card.className = &#039;video-card&#039;;
+                card.onclick = () =&gt; playVideo(videoId, item.snippet.title);
+
+                const thumbnail = item.snippet.thumbnails.medium.url;
+
+                card.innerHTML = `
+                    &lt;img src=&quot;${thumbnail}&quot; alt=&quot;${item.snippet.title}&quot;&gt;
+                    &lt;div class=&quot;video-info&quot;&gt;
+                        &lt;div class=&quot;video-title&quot;&gt;${item.snippet.title}&lt;/div&gt;
+                        &lt;div class=&quot;video-channel&quot;&gt;${item.snippet.channelTitle}&lt;/div&gt;
+                    &lt;/div&gt;
+                `;
+
+                results.appendChild(card);
+            });
+        }
+
+        function playVideo(videoId, title) {
+            const playerSection = document.getElementById(&#039;playerSection&#039;);
+            const currentVideo = document.getElementById(&#039;currentVideo&#039;);
+            const btnStream = document.getElementById(&#039;btnStream&#039;);
+
+            currentVideoId = videoId;
+            availableStreams = [];
+            debugMessages = [];
+            currentQuality = null;
+            
+            addDebug(`🎬 動画ID: ${videoId}`);
+            addDebug(`📝 タイトル: ${title}`);
+            
+            playerSection.style.display = &#039;block&#039;;
+            currentVideo.textContent = title;
+
+            const playerContainer = document.getElementById(&#039;playerContainer&#039;);
+            playerContainer.innerHTML = `&lt;iframe id=&quot;player&quot; width=&quot;100%&quot; height=&quot;100%&quot; src=&quot;https://www.youtube.com/embed/${videoId}?autoplay=1&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;`;
+            
+            const streamUrl = document.getElementById(&#039;streamUrl&#039;);
+            streamUrl.textContent = `埋め込み再生中 | https://www.youtube.com/watch?v=${videoId}`;
+            
+            addDebug(&#039;✅ 埋め込みプレーヤー作成完了&#039;);
+
+            btnStream.disabled = true;
+            btnStream.textContent = &#039;🎬 取得中...&#039;;
+            
+            addDebug(&#039;🔍 ストリーム情報の取得を開始...&#039;);
+            
+            fetchStreamUrls(videoId).then(streams =&gt; {
+                if (streams.length &gt; 0) {
+                    availableStreams = streams;
+                    btnStream.disabled = false;
+                    btnStream.textContent = &#039;🎬 ストリーム再生&#039;;
+                    addDebug(`✅ ${streams.length}個のストリームを取得成功！`);
+                    addDebug(`📊 API: ${streams[0].type}`);
+                    addDebug(`🎚️ 画質: ${streams.map(s =&gt; s.quality).join(&#039;, &#039;)}`);
+                    showInfo(`ストリーム再生が利用可能です（${streams[0].type}）`);
+                    
+                    // ストリーム取得後、自動的にストリーム再生モードに切り替え
+                    addDebug(&#039;🚀 自動的にストリーム再生を開始します&#039;);
+                    setPlayMode(&#039;stream&#039;);
+                } else {
+                    btnStream.disabled = true;
+                    btnStream.textContent = &#039;🎬 利用不可&#039;;
+                    addDebug(&#039;❌ ストリーム取得失敗&#039;);
+                    addDebug(&#039;💡 埋め込み再生をご利用ください&#039;);
+                }
+            }).catch(err =&gt; {
+                addDebug(`❌ エラー: ${err.message}`);
+                btnStream.disabled = true;
+                btnStream.textContent = &#039;🎬 エラー&#039;;
+            });
+
+            playerSection.scrollIntoView({ behavior: &#039;smooth&#039;, block: &#039;start&#039; });
+        }
+
+        async function fetchStreamUrls(videoId) {
+            let attemptCount = 0;
+            const maxAttempts = streamAPIs.reduce((sum, api) =&gt; sum + api.servers.length, 0);
+            
+            addDebug(`🌐 ${maxAttempts}個のエンドポイントを試行`);
+            
+            for (const api of streamAPIs) {
+                addDebug(`\n📡 ${api.name} API (${api.servers.length}サーバー)`);
+                
+                for (const server of api.servers) {
+                    attemptCount++;
+                    try {
+                        addDebug(`  [${attemptCount}/${maxAttempts}] ${server.replace(&#039;https://&#039;, &#039;&#039;)}`);
+                        
+                        let response;
+                        
+                        if (api.customFetch) {
+                            response = await api.customFetch(server, videoId);
+                        } else {
+                            const apiUrl = api.getUrl(server, videoId);
+                            const proxiedUrl = getProxiedUrl(apiUrl);
+                            
+                            try {
+                                response = await fetch(proxiedUrl, {
+                                    signal: AbortSignal.timeout(8000)
+                                });
+                            } catch (proxyErr) {
+                                addDebug(`    ⚠️ プロキシ1失敗、再試行...`);
+                                rotateProxy();
+                                const retryUrl = getProxiedUrl(apiUrl);
+                                response = await fetch(retryUrl, {
+                                    signal: AbortSignal.timeout(8000)
+                                });
+                            }
+                        }
+                        
+                        addDebug(`    → HTTP ${response.status}`);
+                        
+                        if (!response.ok) {
+                            continue;
+                        }
+                        
+                        const contentType = response.headers.get(&#039;content-type&#039;);
+                        let data;
+                        
+                        if (contentType &amp;&amp; contentType.includes(&#039;application/json&#039;)) {
+                            data = await response.json();
+                        } else {
+                            data = await response.text();
+                        }
+                        
+                        addDebug(`    → データ取得成功`);
+                        
+                        const streams = api.parseResponse(data);
+                        
+                        if (streams.length &gt; 0) {
+                            addDebug(`    ✅ ${streams.length}個のストリーム取得！`);
+                            streams.slice(0, 3).forEach((s, i) =&gt; {
+                                addDebug(`      [${i+1}] ${s.quality} ${s.hasAudio ? &#039;🔊&#039; : &#039;🔇&#039;}`);
+                            });
+                            return streams;
+                        } else {
+                            addDebug(`    ⚠️ ストリーム0個`);
+                        }
+                    } catch (err) {
+                        if (err.name === &#039;AbortError&#039;) {
+                            addDebug(`    ⏱️ タイムアウト(8秒)`);
+                        } else {
+                            addDebug(`    ❌ ${err.message}`);
+                        }
+                        continue;
+                    }
+                }
+            }
+            
+            addDebug(&#039;\n❌ すべてのAPIで失敗しました&#039;);
+            return [];
+        }
+
+        function setPlayMode(mode) {
+            if (!currentVideoId) {
+                addDebug(&#039;❌ 動画IDがありません&#039;);
+                return;
+            }
+
+            currentPlayMode = mode;
+            const playerContainer = document.getElementById(&#039;playerContainer&#039;);
+            const streamUrl = document.getElementById(&#039;streamUrl&#039;);
+            const qualityControls = document.getElementById(&#039;qualityControls&#039;);
+
+            streamUrl.textContent = &#039;&#039;;
+            qualityControls.style.display = &#039;none&#039;;
+
+            addDebug(`\n🎮 再生モード切り替え: ${mode}`);
+
+            if (mode === &#039;stream&#039;) {
+                if (availableStreams.length === 0) {
+                    showError(&#039;ストリーム情報が取得できていません&#039;);
+                    addDebug(&#039;❌ ストリーム情報なし&#039;);
+                    return;
+                }
+                
+                addDebug(`📺 video要素を作成`);
+                playerContainer.innerHTML = &#039;&lt;video id=&quot;player&quot; controls autoplay style=&quot;width:100%;height:100%;&quot;&gt;&lt;/video&gt;&#039;;
+                qualityControls.style.display = &#039;grid&#039;;
+                
+                // 画質オプションを動的に生成
+                createQualityButtons();
+                
+                // 最高画質で自動再生
+                playBestQuality();
+                return;
+            }
+
+            addDebug(`📺 iframe埋め込みを作成: ${mode}`);
+            
+            let embedUrl = &#039;&#039;;
+
+            if (mode === &#039;embed&#039;) {
+                embedUrl = `https://www.youtube.com/embed/${currentVideoId}?autoplay=1`;
+                streamUrl.textContent = `埋め込み再生 | https://www.youtube.com/watch?v=${currentVideoId}`;
+            } else if (mode === &#039;nocookie&#039;) {
+                embedUrl = `https://www.youtube-nocookie.com/embed/${currentVideoId}?autoplay=1`;
+                streamUrl.textContent = `No Cookie埋め込み | プライバシー重視`;
+            } else if (mode === &#039;education&#039;) {
+                const eduParams = [
+                    &#039;autoplay=1&#039;,
+                    &#039;mute=0&#039;,
+                    &#039;controls=1&#039;,
+                    &#039;start=0&#039;,
+                    &#039;playsinline=1&#039;,
+                    &#039;showinfo=0&#039;,
+                    &#039;rel=0&#039;,
+                    &#039;iv_load_policy=3&#039;,
+                    &#039;modestbranding=1&#039;,
+                    &#039;fs=1&#039;,
+                    &#039;cc_load_policy=0&#039;,
+                    &#039;enablejsapi=1&#039;
+                ].join(&#039;&amp;&#039;);
+                embedUrl = `https://www.youtube.com/embed/${currentVideoId}?${eduParams}`;
+                streamUrl.textContent = `Education埋め込み | 教育プラットフォーム向け設定`;
+            }
+
+            playerContainer.innerHTML = `&lt;iframe id=&quot;player&quot; width=&quot;100%&quot; height=&quot;100%&quot; src=&quot;${embedUrl}&quot; frameborder=&quot;0&quot; allow=&quot;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture&quot; allowfullscreen&gt;&lt;/iframe&gt;`;
+            
+            addDebug(`✅ 埋め込み完了: ${embedUrl}`);
+        }
+
+        function createQualityButtons() {
+            const qualityControls = document.getElementById(&#039;qualityControls&#039;);
+            qualityControls.innerHTML = &#039;&#039;;
+            
+            // 音声付きストリームを優先
+            const audioStreams = availableStreams.filter(s =&gt; s.hasAudio);
+            const sortableStreams = audioStreams.length &gt; 0 ? audioStreams : availableStreams;
+            
+            // 画質ごとにグループ化
+            const qualityMap = new Map();
+            sortableStreams.forEach(stream =&gt; {
+                const quality = String(stream.quality);
+                if (!qualityMap.has(quality)) {
+                    qualityMap.set(quality, stream);
+                }
+            });
+            
+            // 画質を数値でソート
+            const sortedQualities = Array.from(qualityMap.entries()).sort((a, b) =&gt; {
+                const getQualityValue = (q) =&gt; {
+                    const match = q.match(/(\d+)/);
+                    return match ? parseInt(match[1]) : 0;
+                };
+                return getQualityValue(b[0]) - getQualityValue(a[0]);
+            });
+            
+            addDebug(`🎚️ ${sortedQualities.length}個の画質オプションを生成`);
+            
+            // 各画質のボタンを作成
+            sortedQualities.forEach(([quality, stream], index) =&gt; {
+                const button = document.createElement(&#039;button&#039;);
+                button.textContent = `${quality} ${stream.hasAudio ? &#039;🔊&#039; : &#039;🔇&#039;}`;
+                button.onclick = () =&gt; changeQualityByIndex(index);
+                button.dataset.index = index;
+                qualityControls.appendChild(button);
+            });
+        }
+
+        function playBestQuality() {
+            changeQualityByIndex(0);
+        }
+
+        function changeQualityByIndex(index) {
+            const audioStreams = availableStreams.filter(s =&gt; s.hasAudio);
+            const sortableStreams = audioStreams.length &gt; 0 ? audioStreams : availableStreams;
+            
+            // 画質ごとにグループ化
+            const qualityMap = new Map();
+            sortableStreams.forEach(stream =&gt; {
+                const quality = String(stream.quality);
+                if (!qualityMap.has(quality)) {
+                    qualityMap.set(quality, stream);
+                }
+            });
+            
+            // 画質を数値でソート
+            const sortedQualities = Array.from(qualityMap.entries()).sort((a, b) =&gt; {
+                const getQualityValue = (q) =&gt; {
+                    const match = q.match(/(\d+)/);
+                    return match ? parseInt(match[1]) : 0;
+                };
+                return getQualityValue(b[0]) - getQualityValue(a[0]);
+            });
+            
+            if (index &gt;= sortedQualities.length) {
+                addDebug(&#039;❌ 無効なインデックス&#039;);
+                return;
+            }
+            
+            const [quality, selectedStream] = sortedQualities[index];
+            currentQuality = quality;
+            
+            // ボタンのアクティブ状態を更新
+            const qualityControls = document.getElementById(&#039;qualityControls&#039;);
+            const buttons = qualityControls.querySelectorAll(&#039;button&#039;);
+            buttons.forEach((btn, i) =&gt; {
+                if (i === index) {
+                    btn.classList.add(&#039;active&#039;);
+                } else {
+                    btn.classList.remove(&#039;active&#039;);
+                }
+            });
+            
+            playStream(selectedStream);
+        }
+
+        function changeQuality(qualityLevel) {
+            if (availableStreams.length === 0) return;
+            
+            addDebug(`\n🎚️ 画質変更: ${qualityLevel}`);
+            
+            const audioStreams = availableStreams.filter(s =&gt; s.hasAudio);
+            const sortableStreams = audioStreams.length &gt; 0 ? audioStreams : availableStreams;
+            
+            const sortedStreams = [...sortableStreams].sort((a, b) =&gt; {
+                const getQualityValue = (q) =&gt; {
+                    const match = String(q).match(/(\d+)/);
+                    return match ? parseInt(match[1]) : 0;
+                };
+                return getQualityValue(b.quality) - getQualityValue(a.quality);
+            });
+
+            let selectedStream;
+            
+            switch(qualityLevel) {
+                case &#039;best&#039;:
+                    selectedStream = sortedStreams[0];
+                    break;
+                case &#039;high&#039;:
+                    selectedStream = sortedStreams.find(s =&gt; {
+                        const q = String(s.quality);
+                        return q.includes(&#039;720&#039;) || q.includes(&#039;480&#039;);
+                    }) || sortedStreams[Math.floor(sortedStreams.length / 2)];
+                    break;
+                case &#039;medium&#039;:
+                    selectedStream = sortedStreams.find(s =&gt; {
+                        const q = String(s.quality);
+                        return q.includes(&#039;360&#039;) || q.includes(&#039;240&#039;);
+                    }) || sortedStreams[sortedStreams.length - 1];
+                    break;
+            }
+
+            if (selectedStream) {
+                playStream(selectedStream);
+            }
+        }
+
+        function playStream(stream) {
+            const player = document.getElementById(&#039;player&#039;);
+            const streamUrl = document.getElementById(&#039;streamUrl&#039;);
+            
+            if (!stream || !stream.url) {
+                addDebug(&#039;❌ ストリームの選択に失敗&#039;);
+                showError(&#039;ストリームの読み込みに失敗しました&#039;);
+                return;
+            }
+            
+            addDebug(`✅ 選択: ${stream.quality} (${stream.hasAudio ? &#039;音声あり&#039; : &#039;音声なし&#039;})`);
+            addDebug(`🔗 URL: ${stream.url.substring(0, 80)}...`);
+            
+            player.src = stream.url;
+            player.play().then(() =&gt; {
+                addDebug(&#039;▶️ 再生開始&#039;);
+            }).catch(e =&gt; {
+                addDebug(`❌ 再生エラー: ${e.message}`);
+                showError(&#039;ストリームの再生に失敗しました&#039;);
+            });
+            
+            streamUrl.textContent = `画質: ${stream.quality} | API: ${stream.type} ${stream.hasAudio ? &#039;🔊&#039; : &#039;🔇&#039;}`;
+        }
+
+        async function downloadVideo(type) {
+            if (!currentVideoId) {
+                showError(&#039;動画が選択されていません&#039;);
+                return;
+            }
+
+            addDebug(`\n📥 ダウンロード開始: ${type}`);
+            
+            const btnDownloadVideo = document.getElementById(&#039;btnDownloadVideo&#039;);
+            const btnDownloadAudio = document.getElementById(&#039;btnDownloadAudio&#039;);
+            
+            btnDownloadVideo.disabled = true;
+            btnDownloadAudio.disabled = true;
+            btnDownloadVideo.textContent = &#039;⏳ 処理中...&#039;;
+            btnDownloadAudio.textContent = &#039;⏳ 処理中...&#039;;
+
+            try {
+                let downloadUrl = null;
+                
+                if (availableStreams.length &gt; 0) {
+                    addDebug(&#039;🔍 取得済みストリームURLを使用&#039;);
+                    const stream = availableStreams.find(s =&gt; s.hasAudio) || availableStreams[0];
+                    if (stream) {
+                        downloadUrl = stream.url;
+                        addDebug(`✅ ストリームURL使用: ${stream.quality}`);
+                    }
+                }
+                
+                if (!downloadUrl) {
+                    addDebug(&#039;🔍 新規取得を試行&#039;);
+                    const streams = await fetchStreamUrls(currentVideoId);
+                    if (streams.length &gt; 0) {
+                        const stream = streams.find(s =&gt; s.hasAudio) || streams[0];
+                        downloadUrl = stream.url;
+                        addDebug(`✅ 新規URL取得: ${stream.quality}`);
+                    }
+                }
+
+                if (downloadUrl) {
+                    addDebug(&#039;📥 ダウンロード開始...&#039;);
+                    
+                    const a = document.createElement(&#039;a&#039;);
+                    a.href = downloadUrl;
+                    a.download = `${currentVideoId}.${type === &#039;audio&#039; ? &#039;mp3&#039; : &#039;mp4&#039;}`;
+                    a.target = &#039;_blank&#039;;
+                    a.rel = &#039;noopener noreferrer&#039;;
+                    
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    showInfo(`${type === &#039;video&#039; ? &#039;動画&#039; : &#039;音声&#039;}のダウンロードを開始しました`);
+                    addDebug(&#039;✅ ダウンロードリンククリック完了&#039;);
+                } else {
+                    throw new Error(&#039;ダウンロードURLの取得に失敗しました&#039;);
+                }
+            } catch (err) {
+                addDebug(`❌ ダウンロード失敗: ${err.message}`);
+                showError(&#039;ダウンロードに失敗しました。ストリーム再生をお試しください。&#039;);
+            } finally {
+                btnDownloadVideo.disabled = false;
+                btnDownloadAudio.disabled = false;
+                btnDownloadVideo.textContent = &#039;📥 動画DL&#039;;
+                btnDownloadAudio.textContent = &#039;🎵 音声DL&#039;;
+            }
+        }
+
+        function showError(message) {
+            const error = document.getElementById(&#039;error&#039;);
+            error.textContent = message;
+            error.style.display = &#039;block&#039;;
+            setTimeout(() =&gt; {
+                error.style.display = &#039;none&#039;;
+            }, 5000);
+        }
+
+        function showInfo(message) {
+            const info = document.getElementById(&#039;info&#039;);
+            info.textContent = message;
+            info.style.display = &#039;block&#039;;
+            setTimeout(() =&gt; {
+                info.style.display = &#039;none&#039;;
+            }, 3000);
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
