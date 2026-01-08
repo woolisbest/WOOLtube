@@ -14,11 +14,6 @@
 ### Google App Script
 1. [GAS](https://script.google.com)にアクセス
 2. 新しいプロジェクト
-3. [コード](https://github.com/woolisbest/WOOLtube/raw/refs/heads/main/GAS.gs)を貼り付ける
+3. index.htmlに[コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/fetch-code.html))を貼り付ける
 4. デプロイする
 5. 完了✅
-### C言語
-1. ファイルを開く
-2. [コード](https://github.com/woolisbest/WOOLtube/raw/refs/heads/main/main.c)を貼り付ける
-3. main.cなどの名前で保存
-4. 完了✅
