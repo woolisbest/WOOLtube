@@ -1,8 +1,6 @@
 # 開発終了・これ以降の更新はありません。
 
-
-
-
+```
 ## wooltube
 # wooltubeの公式リポジトリです。
 ## どんどんデプロイしてください!!
@@ -24,3 +22,4 @@
 3. index.htmlに[コード](https://raw.githubusercontent.com/woolisbest/WOOLtube/refs/heads/main/fetch-code.html))を貼り付ける
 4. デプロイする
 5. 完了✅
+```
